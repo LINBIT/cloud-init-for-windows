@@ -27,7 +27,7 @@ DefaultGroupName={#MyAppName}
 ; LicenseFile={#WindrbdSource}\LICENSE.txt
 ; InfoBeforeFile={#WindrbdSource}\inno-setup\about-windrbd.txt
 OutputDir=.
-OutputBaseFilename=install-drbd-reactor-{#MyAppVersion}
+OutputBaseFilename=install-cloud-init-{#MyAppVersion}
 PrivilegesRequired=admin
 Compression=lzma
 SolidCompression=yes
@@ -78,11 +78,11 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
 
-Filename: "schtasks.exe"; Parameters: "/create /sc onstart /tn 'Simple Incomplete Cloud Init For Windows' /tr C:\WinDRBD\cloud-init.bat /ru Administrator /rp LIN:BIT!23"; Flags: runascurrentuser waituntilterminated shellexec runhidden
+Filename: "schtasks.exe"; Parameters: "/create /sc onstart /tn ""Simple Incomplete Cloud Init For Windows"" /tr C:\WinDRBD\cloud-init.bat /ru Administrator /rp LIN:BIT!23 /f"; Flags: runascurrentuser waituntilterminated shellexec runhidden
 
 [UninstallRun]
 
-Filename: "schtasks.exe"; Parameters: "/delete /tn 'Simple Incomplete Cloud Init For Windows' /f"; Flags: runascurrentuser waituntilterminated shellexec runhidden
+Filename: "schtasks.exe"; Parameters: "/delete /tn ""Simple Incomplete Cloud Init For Windows"" /f"; Flags: runascurrentuser waituntilterminated shellexec runhidden
 
 [Registry]
 
