@@ -1,26 +1,37 @@
-# First thing: tell virter that we are not yet ready ...
-rm -f /run/cloud-init/result.json
-
-# if test -f /run/cloud-init/result.json
-# then
-# 	echo "Init already done doing nothing"
-# 	exit 0	# already done
-# fi
-
+LOGFILE=/cygdrive/c/WinDRBD/cloud-init.log
 CDROM=/cygdrive/d
 HOME=/home/Administrator
+
+if [ ! -e /cygdrive/c/WinDRBD ] ; then
+	mkdir -p /cygdrive/c/WinDRBD
+	echo "$( date ) C:\\WinDRBD didn't exist, created it. Please install WinDRBD." >> $LOGFILE
+fi
+
+if [ ! -e $CDROM -o ! -f $CDROM/meta-data -o ! -f $CDROM/user-data ] ; then
+	mkdir -p /cygdrive/c/WinDRBD
+	echo "$( date ) $CDROM (or $CDROM/meta-data or $CDROM/user-data) didn't exist. Please use virter to control this VM." >> $LOGFILE
+	exit 1
+fi
+
+echo "$( date ) Simple Incomplete Cloud Init For Windows started." >> $LOGFILE
+	
+# First thing: tell virter that we are not yet ready ...
+rm -f /run/cloud-init/result.json
 
 HOSTNAME=$( hostname )
 WANTED_HOSTNAME=$( grep local-hostname $CDROM/meta-data | cut -d' ' -f2 )
 
 if [ "$HOSTNAME" -a "$WANTED_HOSTNAME" -a "$HOSTNAME" != "$WANTED_HOSTNAME" ]
 then
+	echo "$( date ) Attempt to change hostname from $HOSTNAME to $WANTED_HOSTNAME (need to reboot)" >> $LOGFILE
 	powershell -Command "Rename-Computer -NewName $WANTED_HOSTNAME -Force"
 	shutdown /r /t 0
 # don't do anything else, we get called again hopefully with the new
 # hostname after reboot.
 	exit 0
 fi
+
+echo "$( date ) Installing SSH keys ..." >> $LOGFILE
 
 mv /etc/ssh_host_rsa_key /etc/ssh_host_rsa_key.orig
 mv /etc/ssh_host_rsa_key.pub /etc/ssh_host_rsa_key.pub.orig
@@ -42,6 +53,8 @@ chmod 600 /etc/ssh_host_rsa_key
 # this creates one storage spaces storage pool with all available physical
 # disks (typically only one). Storage Pool is called LINSTORTest
 # powershell -Command '$PhysicalDisks = (Get-PhysicalDisk -CanPool $True) ; New-StoragePool -FriendlyName LINSTORTest -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks $PhysicalDisks'
+
+echo "$( date ) Done, telling virter that we are ready ..." >> $LOGFILE
 
 mkdir -p /run/cloud-init
 touch /run/cloud-init/result.json
