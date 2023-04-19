@@ -8,7 +8,6 @@ if [ ! -e /cygdrive/c/WinDRBD ] ; then
 fi
 
 if [ ! -e $CDROM -o ! -f $CDROM/meta-data -o ! -f $CDROM/user-data ] ; then
-	mkdir -p /cygdrive/c/WinDRBD
 	echo "$( date ) $CDROM (or $CDROM/meta-data or $CDROM/user-data) didn't exist. Please use virter to control this VM." >> $LOGFILE
 	exit 1
 fi
