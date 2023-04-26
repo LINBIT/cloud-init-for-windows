@@ -13,7 +13,7 @@ if [ ! -e $CDROM -o ! -f $CDROM/meta-data -o ! -f $CDROM/user-data ] ; then
 fi
 
 echo "$( date ) Simple Incomplete Cloud Init For Windows started." >> $LOGFILE
-	
+
 # First thing: tell virter that we are not yet ready ...
 rm -f /run/cloud-init/result.json
 
@@ -34,6 +34,7 @@ echo "$( date ) Installing SSH keys ..." >> $LOGFILE
 
 mv /etc/ssh_host_rsa_key /etc/ssh_host_rsa_key.orig
 mv /etc/ssh_host_rsa_key.pub /etc/ssh_host_rsa_key.pub.orig
+mkdir -p $HOME/.ssh
 mv $HOME/.ssh/authorized_keys $HOME/.ssh/authorized_keys.orig
 
 # parse private host key:
