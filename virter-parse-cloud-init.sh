@@ -38,7 +38,7 @@ mkdir -p $HOME/.ssh
 mv $HOME/.ssh/authorized_keys $HOME/.ssh/authorized_keys.orig
 
 # parse private host key:
-sed -e '/BEGIN/,/END/!d' $CDROM/user-data | sed -e 's/^ *//g' > /etc/ssh_host_rsa_key
+sed -e '/----BEGIN/,/----END/!d' $CDROM/user-data | sed -e 's/^ *//g' > /etc/ssh_host_rsa_key
 # parse public host key:
 sed -e '1,/rsa_public:/d' $CDROM/user-data | sed -e '2,$d' | sed -e 's/^[ -]*//g' > /etc/ssh_host_rsa_key.pub
 # parse authorized public key:
