@@ -54,6 +54,19 @@ chmod 600 /etc/ssh_host_rsa_key
 # disks (typically only one). Storage Pool is called LINSTORTest
 # powershell -Command '$PhysicalDisks = (Get-PhysicalDisk -CanPool $True) ; New-StoragePool -FriendlyName LINSTORTest -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks $PhysicalDisks'
 
+# start cygsshd and make sure it is started.
+# This should solve ocosional ERRORs we observe in LINSTOR tests
+# (vm run --wait-ssh fails)
+# do this by grepping sc query cygsshd output for RUNNING
+# maybe we want a ko count here ...
+
+while ! sc query cygsshd | grep RUNNING > /dev/null
+do
+	echo "$( date ) cygsshd not running, trying to start it ..." >> $LOGFILE
+	sc start cygsshd
+	sleep 10
+done
+
 echo "$( date ) Done, telling virter that we are ready ..." >> $LOGFILE
 
 mkdir -p /run/cloud-init
