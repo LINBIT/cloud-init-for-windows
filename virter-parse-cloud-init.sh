@@ -60,11 +60,17 @@ chmod 600 /etc/ssh_host_rsa_key
 # do this by grepping sc query cygsshd output for RUNNING
 # maybe we want a ko count here ...
 
+i=0
 while ! sc query cygsshd | grep RUNNING > /dev/null
 do
-	echo "$( date ) cygsshd not running, trying to start it ..." >> $LOGFILE
-	sc start cygsshd
+	echo "$( date ) cygsshd not running, trying to start it ($i) ..." >> $LOGFILE
+	sc start cygsshd || break
 	sleep 10
+
+	i=$[ $i+1 ]
+	if [ $i -gt 10 ] ; then
+		echo "$( date ) giving up starting cygsshd ($i) ..." >> $LOGFILE
+	fi
 done
 
 echo "$( date ) Done, telling virter that we are ready ..." >> $LOGFILE
