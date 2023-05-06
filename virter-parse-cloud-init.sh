@@ -64,7 +64,7 @@ i=0
 while ! sc query cygsshd | grep RUNNING > /dev/null
 do
 	echo "$( date ) cygsshd not running, trying to start it ($i) ..." >> $LOGFILE
-	sc start cygsshd || break
+	sc start cygsshd
 	sleep 10
 
 	i=$[ $i+1 ]
