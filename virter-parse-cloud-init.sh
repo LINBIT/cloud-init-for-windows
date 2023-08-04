@@ -70,6 +70,7 @@ do
 	i=$[ $i+1 ]
 	if [ $i -gt 10 ] ; then
 		echo "$( date ) giving up starting cygsshd ($i) ..." >> $LOGFILE
+		break
 	fi
 done
 
