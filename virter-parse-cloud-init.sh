@@ -54,27 +54,31 @@ chmod 600 /etc/ssh_host_rsa_key
 # disks (typically only one). Storage Pool is called LINSTORTest
 # powershell -Command '$PhysicalDisks = (Get-PhysicalDisk -CanPool $True) ; New-StoragePool -FriendlyName LINSTORTest -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks $PhysicalDisks'
 
+echo "$( date ) Done, telling virter that we are ready ..." >> $LOGFILE
+
+mkdir -p /run/cloud-init
+touch /run/cloud-init/result.json
+
 # start cygsshd and make sure it is started.
 # This should solve ocosional ERRORs we observe in LINSTOR tests
 # (vm run --wait-ssh fails)
 # do this by grepping sc query cygsshd output for RUNNING
 # maybe we want a ko count here ...
+# Do this forever. With DRBD9 tests we observe
+# cygsshd crashing from time to time and not being
+# restarted (even when windows is configured for it)
 
 i=0
-while ! sc query cygsshd | grep RUNNING > /dev/null
+while true
 do
-	echo "$( date ) cygsshd not running, trying to start it ($i) ..." >> $LOGFILE
-	sc start cygsshd
-	sleep 10
+	if ! sc query cygsshd | grep RUNNING > /dev/null
+	then
+		echo "$( date ) cygsshd not running, trying to start it ($i) ..." >> $LOGFILE
+		sc start cygsshd >> $LOGFILE
+	else
+		echo "$( date ) cygsshd is running ($i)" >> $LOGFILE
+	fi
+	sleep 3
 
 	i=$[ $i+1 ]
-	if [ $i -gt 10 ] ; then
-		echo "$( date ) giving up starting cygsshd ($i) ..." >> $LOGFILE
-		break
-	fi
 done
-
-echo "$( date ) Done, telling virter that we are ready ..." >> $LOGFILE
-
-mkdir -p /run/cloud-init
-touch /run/cloud-init/result.json
