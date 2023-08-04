@@ -11,9 +11,9 @@ do
 	if ! sc query cygsshd | grep RUNNING > /dev/null
 	then
 		echo "$( date ) cygsshd not running, trying to start it ($i) ..." >> $LOGFILE
-		sc start cygsshd
+		sc start cygsshd >> $LOGFILE
 	else
-		echo "$( date ) cygsshd is running ($i)"
+		echo "$( date ) cygsshd is running ($i)" >> $LOGFILE
 	fi
 	sleep 3
 
