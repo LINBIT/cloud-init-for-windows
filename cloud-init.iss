@@ -68,8 +68,8 @@ Name: "ukrainian"; MessagesFile: "compiler:Languages\Ukrainian.isl"
 Name: "{app}\drbd-resources"
 
 [Files]
-Source: "virter-parse-cloud-init.sh"; DestDir: "C:\WinDRBD"
-Source: "cloud-init.bat"; DestDir: "C:\WinDRBD"
+Source: "virter-parse-cloud-init.sh"; DestDir: "C:\WinDRBD"; Flags: ignoreversion
+Source: "cloud-init.bat"; DestDir: "C:\WinDRBD"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{cm:ProgramOnTheWeb,{#MyAppName}}"; Filename: "{#MyAppURL}"
