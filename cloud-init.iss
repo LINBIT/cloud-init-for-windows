@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 ; Use iscc to compile this (in your innosetup program directory)
 
-#define MyAppName "LINBIT Simple Incomplete Cloud For Windows"
+#define MyAppName "LINBIT Simple Incomplete Cloud Init For Windows"
 #define MyAppPublisher "Linbit"
 #define MyAppURL "http://www.linbit.com/"
 #define MyAppURLDocumentation "https://www.linbit.com/user-guides/"
