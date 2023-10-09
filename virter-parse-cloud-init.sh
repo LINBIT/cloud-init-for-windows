@@ -25,7 +25,8 @@ then
 	echo "$( date ) Attempt to change hostname from $HOSTNAME to $WANTED_HOSTNAME (need to reboot)" >> $LOGFILE
 	powershell -Command "Rename-Computer -NewName $WANTED_HOSTNAME -Force"
 	echo "$( date ) Rearming evaluation license (need to reboot)" >> $LOGFILE
-	cmd /c "slmgr /rearm"
+	cmd /c "cscript C:\\Windows\\System32\\slmgr.vbs /rearm" >> $LOGFILE
+	echo "$( date ) Now rebooting ..." >> $LOGFILE
 	shutdown /r /t 0
 # don't do anything else, we get called again hopefully with the new
 # hostname after reboot.
