@@ -24,6 +24,8 @@ if [ "$HOSTNAME" -a "$WANTED_HOSTNAME" -a "$HOSTNAME" != "$WANTED_HOSTNAME" ]
 then
 	echo "$( date ) Attempt to change hostname from $HOSTNAME to $WANTED_HOSTNAME (need to reboot)" >> $LOGFILE
 	powershell -Command "Rename-Computer -NewName $WANTED_HOSTNAME -Force"
+	echo "$( date ) Rearming evaluation license (need to reboot)" >> $LOGFILE
+	cmd /c "slmgr /rearm"
 	shutdown /r /t 0
 # don't do anything else, we get called again hopefully with the new
 # hostname after reboot.
