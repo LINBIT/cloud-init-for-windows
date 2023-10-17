@@ -35,26 +35,34 @@ fi
 
 echo "$( date ) Installing SSH keys ..." >> $LOGFILE
 
-mv /etc/ssh_host_rsa_key /etc/ssh_host_rsa_key.orig
-mv /etc/ssh_host_rsa_key.pub /etc/ssh_host_rsa_key.pub.orig
-mkdir -p $HOME/.ssh
-mv $HOME/.ssh/authorized_keys $HOME/.ssh/authorized_keys.orig
+# Only do this once, not on every system startup
+if [ ! -e /etc/ssh_host_rsa_key.orig ]
+then
+	echo "$( date ) Looks like this is the first system start, installing ssh keys" >> $LOGFILE
+	mv /etc/ssh_host_rsa_key /etc/ssh_host_rsa_key.orig
+	mv /etc/ssh_host_rsa_key.pub /etc/ssh_host_rsa_key.pub.orig
+	mkdir -p $HOME/.ssh
+	mv $HOME/.ssh/authorized_keys $HOME/.ssh/authorized_keys.orig
 
 # parse private host key:
-sed -e '/----BEGIN/,/----END/!d' $CDROM/user-data | sed -e 's/^ *//g' > /etc/ssh_host_rsa_key
+	sed -e '/----BEGIN/,/----END/!d' $CDROM/user-data | sed -e 's/^ *//g' > /etc/ssh_host_rsa_key
 # parse public host key:
-sed -e '1,/rsa_public:/d' $CDROM/user-data | sed -e '2,$d' | sed -e 's/^[ -]*//g' > /etc/ssh_host_rsa_key.pub
+	sed -e '1,/rsa_public:/d' $CDROM/user-data | sed -e '2,$d' | sed -e 's/^[ -]*//g' > /etc/ssh_host_rsa_key.pub
 # parse authorized public key:
-sed -e '1,/ssh_authorized_keys:/d' $CDROM/user-data | sed -e '2,$d' | sed -e 's/^[ -]*//g' > $HOME/.ssh/authorized_keys
+	sed -e '1,/ssh_authorized_keys:/d' $CDROM/user-data | sed -e '2,$d' | sed -e 's/^[ -]*//g' > $HOME/.ssh/authorized_keys
 
 # Give all files to Administrator (else ssh might work or not):
-chown Administrator.None $HOME/.ssh/authorized_keys /etc/ssh_host_rsa_key.pub /etc/ssh_host_rsa_key
+	chown Administrator.None $HOME/.ssh/authorized_keys /etc/ssh_host_rsa_key.pub /etc/ssh_host_rsa_key
 
 # set permissions for host key:
-chmod 600 /etc/ssh_host_rsa_key
+	chmod 600 /etc/ssh_host_rsa_key
+else
+	echo "$( date ) Not overwriting (possibly changed) ssh keys" >> $LOGFILE
+fi
 
 # this creates one storage spaces storage pool with all available physical
 # disks (typically only one). Storage Pool is called LINSTORTest
+# Should be done by provisioning scripts in the test repos
 # powershell -Command '$PhysicalDisks = (Get-PhysicalDisk -CanPool $True) ; New-StoragePool -FriendlyName LINSTORTest -StorageSubsystemFriendlyName "Windows Storage*" -PhysicalDisks $PhysicalDisks'
 
 echo "$( date ) Done, telling virter that we are ready ..." >> $LOGFILE
