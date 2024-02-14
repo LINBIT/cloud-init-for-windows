@@ -24,10 +24,6 @@ if [ "$HOSTNAME" -a "$WANTED_HOSTNAME" -a "$HOSTNAME" != "$WANTED_HOSTNAME" ]
 then
 	echo "$( date ) Attempt to change hostname from $HOSTNAME to $WANTED_HOSTNAME (need to reboot)" >> $LOGFILE
 	powershell -Command "Rename-Computer -NewName $WANTED_HOSTNAME -Force"
-	echo "$( date ) Rearming evaluation license (need to reboot)" >> $LOGFILE
-# TODO: does it help if we comment this out:
-# We have sometimes Windows not booting ... (hangs after loading boot drivers / initializing HAL ...
-	cmd /c "cscript C:\\Windows\\System32\\slmgr.vbs /rearm" >> $LOGFILE
 	echo "$( date ) Now rebooting ..." >> $LOGFILE
 	shutdown /r /t 0
 # don't do anything else, we get called again hopefully with the new
