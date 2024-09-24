@@ -34,7 +34,7 @@ fi
 echo "$( date ) Installing SSH keys ..." >> $LOGFILE
 
 # Only do this once, not on every system startup
-if [ ! -e /etc/ssh_host_rsa_key.orig ]
+if [ ! -e /etc/dont-overwrite-ssh-keys ]
 then
 	echo "$( date ) Looks like this is the first system start, installing ssh keys" >> $LOGFILE
 	mv /etc/ssh_host_rsa_key /etc/ssh_host_rsa_key.orig
