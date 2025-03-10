@@ -1,5 +1,4 @@
 LOGFILE=/cygdrive/c/WinDRBD/cloud-init.log
-CDROM=/cygdrive/d
 HOME=/home/Administrator
 
 if [ ! -e /cygdrive/c/WinDRBD ] ; then
@@ -7,7 +6,17 @@ if [ ! -e /cygdrive/c/WinDRBD ] ; then
 	echo "$( date ) C:\\WinDRBD didn't exist, created it. Please install WinDRBD." >> $LOGFILE
 fi
 
-if [ ! -e $CDROM -o ! -f $CDROM/meta-data -o ! -f $CDROM/user-data ] ; then
+found=0
+for CDROM in /cygdrive/?
+do
+	if [ -e $CDROM -a -f $CDROM/meta-data -a -f $CDROM/user-data ] ; then
+		echo "$( date ) $CDROM (and $CDROM/meta-data and $CDROM/user-data) found, using that as configuration"
+		found=1
+		break
+	fi
+done
+
+if [ $found -eq 0 ] ; then
 	echo "$( date ) $CDROM (or $CDROM/meta-data or $CDROM/user-data) didn't exist. Please use virter to control this VM." >> $LOGFILE
 	exit 1
 fi
@@ -54,6 +63,12 @@ then
 
 # set permissions for host key:
 	chmod 600 /etc/ssh_host_rsa_key
+
+# and restart cygsshd (necessary on Windows Server 2016)
+	echo "$( date ) Restarting cygsshd ..." >> $LOGFILE
+
+	sc stop cygsshd >> $LOGFILE
+	sc start cygsshd >> $LOGFILE
 else
 	echo "$( date ) Not overwriting (possibly changed) ssh keys" >> $LOGFILE
 fi
