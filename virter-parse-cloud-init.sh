@@ -95,6 +95,7 @@ touch /run/cloud-init/result.json
 i=0
 while true
 do
+	sleep 3
 	if ! sc query cygsshd | grep RUNNING > /dev/null
 	then
 		echo "$( date ) cygsshd not running, trying to start it ($i) ..." >> $LOGFILE
@@ -102,7 +103,6 @@ do
 	else
 		echo "$( date ) cygsshd is running ($i)" >> $LOGFILE
 	fi
-	sleep 3
 
 	i=$[ $i+1 ]
 done
