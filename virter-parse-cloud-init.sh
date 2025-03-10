@@ -10,7 +10,7 @@ found=0
 for CDROM in /cygdrive/?
 do
 	if [ -e $CDROM -a -f $CDROM/meta-data -a -f $CDROM/user-data ] ; then
-		echo "$( date ) $CDROM (and $CDROM/meta-data and $CDROM/user-data) found, using that as configuration"
+		echo "$( date ) $CDROM (and $CDROM/meta-data and $CDROM/user-data) found, using that as configuration" >> $LOGFILE
 		found=1
 		break
 	fi
