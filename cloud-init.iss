@@ -77,12 +77,12 @@ Name: "{group}\View {#MyAppName} Tech Guides"; Filename: "{#MyAppURLDocumentatio
 Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 
 [Run]
+Filename: "cygrunsrv.exe"; Parameters: "-R cloud-init"; Flags: runascurrentuser waituntilterminated shellexec runhidden
 
-Filename: "schtasks.exe"; Parameters: "/create /sc onstart /tn ""Simple Incomplete Cloud Init For Windows"" /tr C:\WinDRBD\cloud-init.bat /ru Administrator /rp LIN:BIT!23 /f"; Flags: runascurrentuser waituntilterminated shellexec runhidden
+Filename: "cygrunsrv.exe"; Parameters: "-I cloud-init -p bash.exe -a '-c /cygdrive/c/WinDRBD/virter-parse-cloud-init.sh' -t auto"; Flags: runascurrentuser waituntilterminated shellexec runhidden
 
 [UninstallRun]
-
-Filename: "schtasks.exe"; Parameters: "/delete /tn ""Simple Incomplete Cloud Init For Windows"" /f"; Flags: runascurrentuser waituntilterminated shellexec runhidden
+Filename: "cygrunsrv.exe"; Parameters: "-R cloud-init"; Flags: runascurrentuser waituntilterminated shellexec runhidden
 
 [Registry]
 
