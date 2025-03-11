@@ -79,7 +79,7 @@ Name: "{group}\{cm:UninstallProgram,{#MyAppName}}"; Filename: "{uninstallexe}"
 [Run]
 Filename: "cygrunsrv.exe"; Parameters: "-R cloud-init"; Flags: runascurrentuser waituntilterminated shellexec runhidden
 
-Filename: "cygrunsrv.exe"; Parameters: "-I cloud-init -p bash.exe -a '-c /cygdrive/c/WinDRBD/virter-parse-cloud-init.sh' -t auto"; Flags: runascurrentuser waituntilterminated shellexec runhidden
+Filename: "cygrunsrv.exe"; Parameters: "-I cloud-init -p /usr/bin/bash.exe -a '-c /cygdrive/c/WinDRBD/virter-parse-cloud-init.sh' -t auto"; Flags: runascurrentuser waituntilterminated shellexec runhidden
 
 [UninstallRun]
 Filename: "cygrunsrv.exe"; Parameters: "-R cloud-init"; Flags: runascurrentuser waituntilterminated shellexec runhidden
