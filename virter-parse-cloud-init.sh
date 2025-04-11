@@ -7,13 +7,23 @@ if [ ! -e /cygdrive/c/WinDRBD ] ; then
 fi
 
 found=0
-for CDROM in /cygdrive/?
+while true
 do
-	if [ -e $CDROM -a -f $CDROM/meta-data -a -f $CDROM/user-data ] ; then
-		echo "$( date ) $CDROM (and $CDROM/meta-data and $CDROM/user-data) found, using that as configuration" >> $LOGFILE
-		found=1
+	for CDROM in /cygdrive/?
+	do
+		if [ -e $CDROM -a -f $CDROM/meta-data -a -f $CDROM/user-data ] ; then
+			echo "$( date ) $CDROM (and $CDROM/meta-data and $CDROM/user-data) found, using that as configuration" >> $LOGFILE
+			found=1
+			break
+		fi
+	done
+	if [ $found -eq 1 ]
+	then
 		break
 	fi
+	echo "$( date ) No virter ci CDROM found. Please use virter to control this VM." >> $LOGFILE
+	echo "$( date ) I am searching again in 5 seconds ..." >> $LOGFILE
+	sleep 5
 done
 
 if [ $found -eq 0 ] ; then
